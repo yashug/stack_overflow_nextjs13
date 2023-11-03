@@ -4,7 +4,7 @@ import React, { createContext, useContext, useEffect, useState } from "react";
 
 interface ThemeContextType {
   mode: string;
-  setMode: (mode: "light" | "dark") => void;
+  setMode: (mode: string) => void;
 }
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
@@ -13,12 +13,15 @@ export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
   const [mode, setMode] = useState("light");
 
   const handleThemeChange = () => {
-    if (mode === "light") {
+    if (
+      localStorage.theme === "dark" ||
+      window.matchMedia("(prefers-color-scheme: dark)").matches
+    ) {
       setMode("dark");
       document.documentElement.classList.add("dark");
     } else {
       setMode("light");
-      document.documentElement.classList.add("light");
+      document.documentElement.classList.remove("dark");
     }
   };
 
